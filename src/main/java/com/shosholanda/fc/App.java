@@ -1,10 +1,12 @@
 package com.shosholanda.fc;
 
 /**
- * Hello world!
+ * Práctica 5. Curvas elípticas.
  */
 public class App {
+    
     public static void main(String[] args) {
-        System.out.println("Hello World!");
+	CurvaEliptica c = new CurvaEliptica();
+	System.out.println(c);
     }
 }
