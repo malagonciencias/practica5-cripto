@@ -84,7 +84,8 @@ public class Punto {
      */
     @Override
     public boolean equals(Object o){
-        return this == o;
+        Punto oCast = (Punto) o;
+        return (this.x == oCast.x && this.y == oCast.y);
     }
 
 }

@@ -27,7 +27,9 @@ public class CurvaEliptica {
      * la construcción:  4a³ + 27b² != 0
      */
     public CurvaEliptica(){
-
+        this.a= 1;
+        this.b = 1;
+        this.primo = 3;
     }
 
     /**
@@ -38,7 +40,11 @@ public class CurvaEliptica {
      * @throws IllegalArgumentException si no es una curva válida.
      */
     public CurvaEliptica(int a, int b, int primo){
-
+        if((4 * a^3 + 27 * b ^ 2) == 0)
+            throw new IllegalAccessError("Parametros invalidos");
+        this.a = a;
+        this.b = b;
+        this.primo = primo;
     }
     
     /**
@@ -46,7 +52,7 @@ public class CurvaEliptica {
      * @return el coeficiente A de esta curva elíptica.
      */
     public int getA(){
-
+        return this.a;
     }
     
     /**
@@ -54,7 +60,7 @@ public class CurvaEliptica {
      * @return el coeficiente B de esta curva elíptica.
      */
     public int getB(){
-
+        return this.b;
     }
 
     /**
@@ -62,7 +68,7 @@ public class CurvaEliptica {
      * @return el primo relacionado a esta curva elíptica.
      */
     public int getPrimo(){
-
+        return this.primo;
     }
     
     /**
@@ -72,7 +78,7 @@ public class CurvaEliptica {
      * @return si el punto pertenece o no a la curva.
      */
     public boolean pertenece(Punto p){
-
+        return true;
     }
 
     /**
@@ -80,7 +86,7 @@ public class CurvaEliptica {
      * la curva
      */
     private boolean pertenece(int x, int y){
-
+        return pertenece(new Punto(x, y));
     }
 
 
@@ -89,7 +95,8 @@ public class CurvaEliptica {
      * @return todos los puntos (a, b) que cumplen la congruencia
      */
     public List<Punto> puntos(){
-
+        List<Punto> puntos = new ArrayList<>();
+        return puntos;
     }
 
 
@@ -101,7 +108,8 @@ public class CurvaEliptica {
      * @throws IllegalArgumentException si el punto P no pertenece a la curva.
      */
     public List<Punto> genera(Punto p){
-
+        List<Punto> aaa = new ArrayList<>();
+        return aaa;
     }
 
 
@@ -114,19 +122,40 @@ public class CurvaEliptica {
      * @throws IllegalArgumentException si p o q no son parte de la curva.
      */
     public Punto suma(Punto p, Punto q){
+        int x1 = p.getX();
+        int y1 = p.getY();
+        int x2 = q.getX();
+        int y2 = q.getY();
+        int x3, y3;
+        if(p.equals(q)){ // Caso "duplicar" un punto
+            int lambda = (3*x1^2 + this.a) / (2 * y1);
+            x3 = lambda^2;
+            x3 = lambda - (-2 * x1);
 
+            y3 = lambda * (x1 - x3) - y1;
+
+            return new Punto(x3, y3);
+        } else { // Caso normal
+            x3 = ((y2 - y1) / (x2 - x1))^2 - x1 - x2;
+            y3 = ((y2 - y1) / (x2 - x1)) * (x1 - x3) - y1;
+            return new Punto(x3, y3);
+        }
     }
 
 
     /**
-     * Suma k veces el punto p consigo mismo. En otras palabras
+     * Suma k veces el punto p consigo mismo. En otras palabras 
      * calcula k * P.
      * @param k el número de veces a multiplicar consigo mismo.
      * @param p el punto a multiplicar k veces consigo mismo.
      * @return el resultado de k*P (suma multiple).
      */
     public Punto multiplicacion(int k, Punto p){
-
+        Punto it = p.copia();
+        for(int i = 0; i < k; i++){
+            it = this.suma(it, p);
+        }
+        return it;
     }
 
 
@@ -141,7 +170,7 @@ public class CurvaEliptica {
      * @throws IllegalArgumentException si el punto p no pertenece a la cuva.
      */
     public int orden(Punto p){
-
+        return 3;
     }
  
     /**
@@ -152,7 +181,7 @@ public class CurvaEliptica {
      * @return el cofactor de este punto P en la curva.
      */
     public double cofactor(Punto p){
-
+        return 1.1d;
     }
     
 
@@ -162,7 +191,7 @@ public class CurvaEliptica {
      */
     @Override
     public String toString(){
-
+        return "";
     }
 
     /**
@@ -172,7 +201,7 @@ public class CurvaEliptica {
      */
     @Override
     public boolean equals(Object o){
-
+        return true;
     }
 
 
@@ -183,7 +212,10 @@ public class CurvaEliptica {
      * @return el punto inverso de p.
      */
     private Punto inverso(Punto p){
-
+        if(p.getX() == 0)
+            return p.copia();
+        else
+            return new Punto(p.getX(), -p.getY());
     }
 	
 }
