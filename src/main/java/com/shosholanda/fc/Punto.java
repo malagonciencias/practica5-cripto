@@ -73,7 +73,7 @@ public class Punto {
      */
     @Override
     public String toString(){
-        return "Punto\nx: " + this.x + "\ny: " + this.y;
+        return "(" + this.x + ", " + this.y + ")";
     }
 
 
@@ -84,6 +84,7 @@ public class Punto {
      */
     @Override
     public boolean equals(Object o){
+        if (o == null || o.getClass() != this.getClass()) return false;
         Punto oCast = (Punto) o;
         return (this.x == oCast.x && this.y == oCast.y);
     }
