@@ -42,7 +42,6 @@ public class CurvaEliptica {
     public CurvaEliptica(int a, int b, int primo){
         if((4 * a* a * a + 27 * b * b) == 0)
             throw new IllegalArgumentException("Parametros invalidos");
-        System.out.println(Funciones.esPrimo(primo));
         if(!Funciones.esPrimo(primo))
             throw new IllegalArgumentException("El modulo debe ser primo");
 
@@ -90,7 +89,8 @@ public class CurvaEliptica {
      * la curva
      */
     private boolean pertenece(int x, int y){
-        return pertenece(new Punto(x, y));
+        boolean b = (y * y) % this.primo == ( (x * x * x) + (this.a * x) + this.b ) % this.primo;
+        return b;
     }
 
 
@@ -100,6 +100,12 @@ public class CurvaEliptica {
      */
     public List<Punto> puntos(){
         List<Punto> puntos = new ArrayList<>();
+        puntos.add(null); // punto al infinito
+        int p = this.primo;
+        for (int x = 0; x < p; x++)
+            for (int y = 0; y < p; y++)
+                if (this.pertenece(x, y))
+                    puntos.add(new Punto(x, y));
         return puntos;
     }
 
