@@ -40,8 +40,12 @@ public class CurvaEliptica {
      * @throws IllegalArgumentException si no es una curva válida.
      */
     public CurvaEliptica(int a, int b, int primo){
-        if((4 * a^3 + 27 * b ^ 2) == 0)
-            throw new IllegalAccessError("Parametros invalidos");
+        if((4 * a* a * a + 27 * b * b) == 0)
+            throw new IllegalArgumentException("Parametros invalidos");
+        System.out.println(Funciones.esPrimo(primo));
+        if(!Funciones.esPrimo(primo))
+            throw new IllegalArgumentException("El modulo debe ser primo");
+
         this.a = a;
         this.b = b;
         this.primo = primo;
