@@ -195,7 +195,8 @@ public class CurvaEliptica {
      */
     @Override
     public String toString(){
-        return "";
+        String repr = "y² ≡ x³ + " + this.a + "x + " + this.b + "   mod " + this.primo;
+        return repr;
     }
 
     /**
