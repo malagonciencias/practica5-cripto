@@ -132,22 +132,40 @@ public class CurvaEliptica {
      * @throws IllegalArgumentException si p o q no son parte de la curva.
      */
     public Punto suma(Punto p, Punto q){
+        if (p == null)
+            return q; // punto al infinito
+        if (q == null)
+            return p; // punto al infinito
+
         int x1 = p.getX();
         int y1 = p.getY();
+
         int x2 = q.getX();
         int y2 = q.getY();
+
         int x3, y3;
+
+
+        if (y2 == Funciones.inversoAditivo(y1, this.primo)) {
+            return null; // punto al infinito
+        }
+
         if(p.equals(q)){ // Caso "duplicar" un punto
-            int lambda = (3*x1^2 + this.a) / (2 * y1);
-            x3 = lambda^2;
-            x3 = lambda - (-2 * x1);
+
+            if (y1 == 0) {
+                return null; // punto al infinito
+            }
+            int lambda = (3*x1 * x1 + this.a) * Funciones.inversoMultiplicativo(2 * y1, this.primo);
+            x3 = lambda * lambda - 2 * x1;
+            //x3 = lambda - (-2 * x1);
 
             y3 = lambda * (x1 - x3) - y1;
 
             return new Punto(x3, y3);
         } else { // Caso normal
-            x3 = ((y2 - y1) / (x2 - x1))^2 - x1 - x2;
-            y3 = ((y2 - y1) / (x2 - x1)) * (x1 - x3) - y1;
+            int lambda = (y2 - y1) * Funciones.inversoMultiplicativo(x2 - x1, this.primo);
+            x3 = lambda * lambda - x1 - x2;
+            y3 = lambda * (x1 - x3) - y1;
             return new Punto(x3, y3);
         }
     }
