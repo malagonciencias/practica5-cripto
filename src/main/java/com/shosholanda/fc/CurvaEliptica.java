@@ -124,8 +124,30 @@ public class CurvaEliptica {
      * @throws IllegalArgumentException si el punto P no pertenece a la curva.
      */
     public List<Punto> genera(Punto p){
-        List<Punto> aaa = new ArrayList<>();
-        return aaa;
+        //List<Punto> aaa = new ArrayList<>();
+        //return aaa;
+        if (!pertenece(p))
+            throw new IllegalArgumentException("El punto p no pertenece a la curva");
+
+        List<Punto> res = new ArrayList<>();
+        if (p == null) { // punto al infinito -> sólo devuelve lista vacía o lista con null según preferencia
+            res.add(null);
+            return res;
+        }
+
+        Punto actual = new Punto(p.getX(), p.getY());
+        // límite para evitar bucles infinitos en caso de bug: el número de puntos de la curva
+        int limite = puntos().size() + 5;
+
+        while (actual != null && limite-- > 0) {
+            res.add(actual.copia());
+            actual = suma(actual, p);
+        }
+
+        // Si actual == null, opcional agregar el infinito al final
+        if (actual == null) res.add(null);
+
+        return res;
     }
 
 
