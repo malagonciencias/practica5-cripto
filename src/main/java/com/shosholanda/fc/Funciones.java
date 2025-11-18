@@ -92,24 +92,28 @@ public class Funciones {
      * @return i tal que a * i sea congruente con 1 módulo m.
      */
     public static int inversoMultiplicativo(int a, int mod){
-        // reutilizamos euclides extendido
-        int rAux = a;
-        int r = mod;
-        int sAux = 1;
-        int s = 0;
-        int tAux = 0;
-        int t = 1;
-        int residuo;
-        while(r != 0){
-            residuo = rAux / r;
-            rAux = r;
-            r = rAux - residuo * r;
-            sAux = s;
-            s = sAux - residuo * s;
-            tAux = t;
-            t = tAux - residuo * t;
+        int t = 0, newT = 1;
+        int r = mod, newR = a;
+
+        while (newR != 0) {
+            int q = r / newR;
+
+            int tempT = newT;
+            newT = t - q * newT;
+            t = tempT;
+
+            int tempR = newR;
+            newR = r - q * newR;
+            r = tempR;
         }
-        return modulo(sAux, mod);
+
+        if (r > 1) 
+            throw new ArithmeticException("No tiene inverso");
+
+        if (t < 0)
+            t += mod;
+
+        return t;
     }
 
     /**
