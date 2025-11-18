@@ -14,43 +14,21 @@ public class Funciones {
      * @return
      */
     public static int expMod(int base, int exp, int mod){
-        // utilizaremos un metodo iterativo inductivo donde b grandes en b chicas
-        // a^1, a^2, a^3, a^4, a^8, a^16
-        int dos, tres, cuatro, ocho, dieciseis;
-        int acc = 1;
-        dos = (base ^ 2) % mod;
-        tres = (base ^ 3) % mod;
-        cuatro = (base ^ 4) % mod;
-        ocho = (base ^ 8) % mod;
-        dieciseis = (base ^ 16) % mod;
-        while(exp > 1){
-            if(exp >= 16){
-                exp -= 16;
-                acc *= dieciseis;
-                acc %= mod;
-            }else if(exp >= 8){
-                exp -= 8;
-                acc *= ocho;
-                acc %= mod;
-            }else if(exp >= 4){
-                exp -= 4;
-                acc *= cuatro;
-                acc %= mod;
-            }else if(exp >= 3){
-                exp -= 3;
-                acc *= tres;
-                acc %= mod;
-            }else if(exp >= 2){
-                exp -= 2;
-                    acc *= dos;
-                    acc %= mod;
-            }else if(exp >= 1){
-                exp -= 1;
-                acc *= base;
-                acc %= mod;
+        // Exponenciacion rapida modular o binaria
+        int resultado = 1; // resultado inicial
+        int potenciaActual = base % mod; // Base inicial, debemos asegurar de que es modulo m
+
+        while(exp > 0){
+            // si el bit menos significativo es 1, multiplicamos
+            if((exp & 1) == 1){
+                resultado = (resultado * potenciaActual) % mod;
             }
+            // elevamos la potencia actual al cuadrado
+            potenciaActual = (potenciaActual * potenciaActual) % mod;
+            // desplazamos el exponente a la derecha
+            exp = exp >> 1;
         }
-        return acc;
+        return resultado;
     }
 
     /**
@@ -60,6 +38,11 @@ public class Funciones {
      * @return true si el número es primo, false en otro caso.
      */
     public static boolean esPrimo(int n){
+
+        if (n <= 1) return false;
+        if (n <= 3) return true;
+        if (n % 2 == 0) return false;
+
         Random rand = new Random(System.currentTimeMillis());
         int d, itMod;
         // con cada test disminuye la probabilidad de que un mentiroso nos mienta, 1/2^12 deberia ser suficientemente bueno en este caso
@@ -109,24 +92,28 @@ public class Funciones {
      * @return i tal que a * i sea congruente con 1 módulo m.
      */
     public static int inversoMultiplicativo(int a, int mod){
-        // reutilizamos euclides extendido
-        int rAux = a;
-        int r = mod;
-        int sAux = 1;
-        int s = 0;
-        int tAux = 0;
-        int t = 1;
-        int residuo;
-        while(r != 0){
-            residuo = rAux / r;
-            rAux = r;
-            r = rAux - residuo * r;
-            sAux = s;
-            s = sAux - residuo * s;
-            tAux = t;
-            t = tAux - residuo * t;
+        int t = 0, newT = 1;
+        int r = mod, newR = a;
+
+        while (newR != 0) {
+            int q = r / newR;
+
+            int tempT = newT;
+            newT = t - q * newT;
+            t = tempT;
+
+            int tempR = newR;
+            newR = r - q * newR;
+            r = tempR;
         }
-        return modulo(sAux, mod);
+
+        if (r > 1) 
+            throw new ArithmeticException("No tiene inverso");
+
+        if (t < 0)
+            t += mod;
+
+        return t;
     }
 
     /**
